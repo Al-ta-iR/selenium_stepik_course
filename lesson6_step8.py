@@ -5,7 +5,7 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.by import By
 
 
-link = 'http://suninjuly.github.io/simple_form_find_task.html'
+link = 'http://suninjuly.github.io/find_xpath_form'
 try:
     options = Options()
     options.binary_location = r'C:\Program Files\Mozilla Firefox\firefox.exe'
@@ -20,7 +20,7 @@ try:
     input3.send_keys("Smolensk")
     input4 = browser.find_element(By.ID, "country")
     input4.send_keys("Russia")
-    button = browser.find_element(By.CSS_SELECTOR, "button.btn")
+    button = browser.find_element(By.XPATH, "//button[@type='submit']")
     button.click()
 
 
