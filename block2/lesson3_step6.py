@@ -3,10 +3,9 @@ import time
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import Select
 
 
-link = "http://suninjuly.github.io/alert_accept.html"
+link = "http://suninjuly.github.io/redirect_accept.html"
 
 try:
     options = Options()
@@ -14,12 +13,11 @@ try:
     browser = webdriver.Firefox(executable_path=r'C:\WebDrivers\geckodriver.exe', options=options)
     browser.get(link)
 
-    window_before = browser.window_handles[0]
-    browser.find_element(By.CLASS_NAME, "btn.btn-primary").click()
-    browser.switch_to.alert.accept()
+    browser.find_element(By.CLASS_NAME, "trollface.btn.btn-primary").click()
 
-    browser.switch_to.window(window_before)
-    time.sleep(1)
+    time.sleep(2)
+    window_new = browser.window_handles[1]
+    browser.switch_to.window(window_new)
     x_value = browser.find_element(By.ID, "input_value").text
 
     result = math.log(abs(12*math.sin(int(x_value))))
