@@ -50,13 +50,8 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-@pytest.fixture(scope="module")
-def login_func(browser):
-    link_url = 'https://stepik.org/'
-    browser.get(link_url)
-
-    # WebDriverWait(browser, 12).until(EC.text_to_be_present_in_element((By.ID, "price"), '100'))
-    browser.find_element(By.ID, "ember224").click()
+# WebDriverWait(browser, 12).until(EC.text_to_be_present_in_element((By.ID, "price"), '100'))
+# browser.find_element(By.ID, "ember224").click()
 
 
 # @pytest.mark.parametrize('language', ["ru", "en-gb"])
@@ -64,4 +59,3 @@ def test_guest_should_see_login_link(browser):
     link = f"http://selenium1py.pythonanywhere.com/ru/"
     browser.get(link)
     browser.find_element(By.CSS_SELECTOR, "#login_link")
-
