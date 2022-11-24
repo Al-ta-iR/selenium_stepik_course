@@ -1,10 +1,17 @@
 import pytest
 import math
 import time
+import os
+from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
+env_path = os.path.join('secrets.env')
+load_dotenv(env_path)
+EMAIL = os.getenv("EMAIL")
+PASSWORD = os.getenv("PASSWORD")
 
 links = [
     'https://stepik.org/lesson/236895/step/1',
@@ -18,7 +25,22 @@ links = [
 ]
 
 
-class TestStepikBlock3():
+
+@pytest.fixture(scope="session")
+def login_func(browser):
+    link_url = 'https://stepik.org/catalog?auth=login'
+    browser.get(link_url)
+    WebDriverWait(browser, 5).until(
+        EC.visibility_of_element_located((By.ID, "id_login_email"))
+    ).send_keys(EMAIL)
+    browser.find_element(By.ID, "id_login_password").send_keys(PASSWORD)
+    WebDriverWait(browser, 5).until(
+        EC.element_to_be_clickable((By.CLASS_NAME, "sign-form__btn.button_with-loader"))
+    ).click()
+    time.sleep(1)
+
+
+class TestStepik365(login_func):
     @pytest.mark.parametrize('link', links)
     def test_guest_should_see_login_link(self, browser, link):
         browser.get(link)
