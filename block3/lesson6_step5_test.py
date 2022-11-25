@@ -25,8 +25,7 @@ links = [
 ]
 
 
-
-@pytest.fixture(scope="session")
+@pytest.fixture(autouse=True, scope="module")
 def login_func(browser):
     link_url = 'https://stepik.org/catalog?auth=login'
     browser.get(link_url)
@@ -37,30 +36,29 @@ def login_func(browser):
     WebDriverWait(browser, 5).until(
         EC.element_to_be_clickable((By.CLASS_NAME, "sign-form__btn.button_with-loader"))
     ).click()
-    time.sleep(1)
+    time.sleep(3)
 
 
-class TestStepik365(login_func):
-    @pytest.mark.parametrize('link', links)
-    def test_guest_should_see_login_link(self, browser, link):
-        browser.get(link)
-        try:
-            WebDriverWait(browser, 5).until(
-                EC.visibility_of_element_located((By.CLASS_NAME, "again-btn.white"))
-            ).click()
-        except:
-            pass
-        math_value = str(math.log(int(time.time())))
-        WebDriverWait(browser, 15).until(
-            EC.visibility_of_element_located((By.CLASS_NAME, "ember-text-area.ember-view.textarea.string-quiz__textarea"))
-        ).send_keys(math_value)
-
+@pytest.mark.parametrize('link', links)
+def test_guest_should_see_login_link(browser, link):
+    browser.get(link)
+    try:
         WebDriverWait(browser, 5).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, "submit-submission"))
+            EC.visibility_of_element_located((By.CLASS_NAME, "again-btn.white"))
         ).click()
-        answer = WebDriverWait(browser, 5).until(
-            EC.visibility_of_element_located((By.CLASS_NAME, "smart-hints__hint"))
-        ).text
-        assert answer == 'Correct!', f'Ответ должен быть "Correct", получен {answer}'
+    except:
+        pass
+    math_value = str(math.log(int(time.time())))
+    WebDriverWait(browser, 15).until(
+        EC.visibility_of_element_located((By.CLASS_NAME, "ember-text-area.ember-view.textarea.string-quiz__textarea"))
+    ).send_keys(math_value)
+
+    WebDriverWait(browser, 5).until(
+        EC.element_to_be_clickable((By.CLASS_NAME, "submit-submission"))
+    ).click()
+    answer = WebDriverWait(browser, 5).until(
+        EC.visibility_of_element_located((By.CLASS_NAME, "smart-hints__hint"))
+    ).text
+    assert answer == 'Correct!', f'Ответ должен быть "Correct", получен {answer}'
 
 # python -m pytest -s -v block3/lesson6_step5_test.py
