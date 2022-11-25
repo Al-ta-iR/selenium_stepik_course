@@ -12,9 +12,7 @@ from selenium.webdriver.support import expected_conditions as EC
 @pytest.fixture(scope="module")
 def browser():
     print("\n► start browser for test..")
-    options = Options()
-    options.binary_location = r'C:\Program Files\Mozilla Firefox\firefox.exe'
-    browser = webdriver.Firefox(executable_path=r'C:\WebDrivers\geckodriver.exe', options=options)
+    browser = webdriver.Firefox()
     yield browser
     print("\n◄ quit browser..")
     browser.quit()
